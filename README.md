@@ -28,6 +28,7 @@ ubicado en `data/WA_Fn-UseC_-Telco-Customer-Churn.csv`.
 ```bash
 python src/preprocessing.py   # Fase 2: limpieza y partición train/validación/test (muestra un resumen)
 python src/train.py           # Fase 3: entrena Regresión Logística y Red Neuronal, guarda en models/
+python src/evaluate.py        # Fase 4: métricas en validación, matrices de confusión y curva ROC
 ```
 _Completar con los siguientes comandos (entrenamiento, evaluación, predicción)._
 
