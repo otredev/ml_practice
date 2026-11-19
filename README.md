@@ -31,13 +31,15 @@ python src/train.py           # Fase 3: entrena Regresión Logística y Red Neur
 python src/evaluate.py        # Fase 4: métricas en validación, matrices de confusión y curva ROC
 python src/threshold.py       # Fase 5: umbral óptimo según costos → models/config.json
 python src/final_test.py      # Fase 6: evaluación final en test (una sola vez)
+python src/predict.py         # Fase 7: predicciones con explicación para data/ejemplo_clientes.csv
+streamlit run app.py          # Fase 8: interfaz web
 ```
-_Completar con los siguientes comandos (entrenamiento, evaluación, predicción)._
 
 ## Estructura del proyecto
 ```
 data/              dataset original
 notebooks/         análisis exploratorio (EDA)
+app.py             interfaz web (Streamlit)
 src/               preprocesamiento, entrenamiento, evaluación y predicción
 models/            modelos entrenados
 results/           tablas de resultados
@@ -45,7 +47,24 @@ results/figuras/   gráficos
 ```
 
 ## Generar predicciones
-_Completar: cómo usar `src/predict.py`, con un ejemplo de entrada y salida._
+Con un CSV que tenga las mismas columnas del dataset (sin `Churn`):
+```bash
+python src/predict.py --input data/ejemplo_clientes.csv --output results/predicciones.csv
+```
+Ejemplo de salida:
+```
+[9237-HQITU] CONTACTAR — Probabilidad de abandono: 69%. Supera el umbral de 14%, así que conviene
+contactarlo. Lo que más aumenta el riesgo: Antigüedad: 2 meses; Contrato: mes a mes;
+Internet: fibra óptica (USD 70.70/mes). ...
+```
+La explicación usa los coeficientes de la Regresión Logística: aporte = coeficiente × (valor del cliente − promedio en train).
+
+### Interfaz
+```bash
+streamlit run app.py
+```
+Se abre en el navegador un formulario para cargar los datos de un cliente; muestra la probabilidad
+de abandono, la recomendación (contactar / no contactar) y los factores que más suben y bajan el riesgo.
 
 ## Resultados
 _Completar: tabla comparativa (precision, recall, F1, ROC-AUC, costo USD) y gráficos._
