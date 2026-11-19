@@ -1,0 +1,9 @@
+{
+  "conjunto": "validacion",
+  "validacion_sha256": "583277fdf25bd1442747734118d167866ac1757b5702eb4b2a59fee6054dfc78",
+  "costo_fn_usd": 120,
+  "costo_fp_usd": 15,
+  "clase_positiva": "Churn=Yes; decisión=contactar",
+  "matriz": "filas reales [No, Yes]; columnas decisiones [No contactar, Contactar]",
+  "precision_sin_predicciones_positivas": "0 por convención (zero_division=0)"
+}

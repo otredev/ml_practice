@@ -1,0 +1,26 @@
+{
+  "fuente": "archive/WA_Fn-UseC_-Telco-Customer-Churn_clean.csv",
+  "fuente_sha256": "4143ba6c9b0af715d5d98f7bf365a451e6a86e551c5186377e89add8ab83a205",
+  "random_state": 42,
+  "proporciones": [
+    0.7,
+    0.15,
+    0.15
+  ],
+  "metodo": "train_test_split: reserva 30%; dividir reserva 50/50; estratificar ambas por Churn",
+  "filas": {
+    "train": 4930,
+    "validacion": 1056,
+    "test": 1057
+  },
+  "versiones": {
+    "pandas": "3.1.1",
+    "scikit-learn": "1.9.1"
+  },
+  "archivos_sha256": {
+    "train.csv": "97521325d1575ff9e7cfe8cc36e032357e440d1dee66b82a4e4568bf9e3d1df4",
+    "validacion.csv": "583277fdf25bd1442747734118d167866ac1757b5702eb4b2a59fee6054dfc78",
+    "test.csv": "bc8adf2426e86575d72e00b86ffbc40aa2e94426c270f1d5538717be1b5d8af0",
+    "asignacion.csv": "7c47dbbd9c12d65b2d9b0a97d77b1117cb0623c1d666a04404ee50f908283e5a"
+  }
+}

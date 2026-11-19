@@ -21,7 +21,7 @@ se toma con ella (a quién contactar para intentar retenerlo).
 
 - Dataset público **Telco Customer Churn** (Kaggle):
   https://www.kaggle.com/datasets/blastchar/telco-customer-churn. 
-  - El archivo está en `archive/WA_Fn-UseC_-Telco-Customer-Churn.csv`.
+  - El archivo está en `archive/WA_Fn-UseC_-Telco-Customer-Churn_clean.csv`.
 - Contiene información de cada cliente: servicios contratados, gastos, antigüedad
   y si abandonó o no la compañía (`Churn`).
 - Antes de construir nada hay que entender qué información está disponible, qué

@@ -1,0 +1,1 @@
+Antes de cualquier tarea, lee CONTEXT.md
