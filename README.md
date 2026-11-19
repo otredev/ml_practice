@@ -30,6 +30,7 @@ python src/preprocessing.py   # Fase 2: limpieza y partición train/validación/
 python src/train.py           # Fase 3: entrena Regresión Logística y Red Neuronal, guarda en models/
 python src/evaluate.py        # Fase 4: métricas en validación, matrices de confusión y curva ROC
 python src/threshold.py       # Fase 5: umbral óptimo según costos → models/config.json
+python src/final_test.py      # Fase 6: evaluación final en test (una sola vez)
 ```
 _Completar con los siguientes comandos (entrenamiento, evaluación, predicción)._
 
@@ -50,7 +51,17 @@ _Completar: cómo usar `src/predict.py`, con un ejemplo de entrada y salida._
 _Completar: tabla comparativa (precision, recall, F1, ROC-AUC, costo USD) y gráficos._
 
 ## Recomendación
-_Completar: modelo y umbral recomendados, con su justificación._
+**Regresión Logística con umbral 0,14**: contactar a todo cliente con probabilidad de abandono mayor al 14 %.
+
+| Estrategia (test, 1.409 clientes) | Recall | FN | FP | Costo (USD) |
+|---|---|---|---|---|
+| Regresión Logística, umbral 0,14 (elegida) | 0,917 | 31 | 457 | **10.575** |
+| Regresión Logística, umbral 0,5 | 0,527 | 177 | 122 | 23.070 |
+| Regla: contrato mes a mes | 0,866 | 50 | 462 | 12.930 |
+| Contactar a todos | 1,000 | 0 | 1.035 | 15.525 |
+
+Ahorra 18 % frente a la regla simple. La red neuronal costó prácticamente lo mismo en validación,
+así que se eligió la Regresión Logística por ser más simple y explicable.
 
 ## Equipo
 - 
