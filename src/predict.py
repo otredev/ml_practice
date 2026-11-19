@@ -64,10 +64,21 @@ VALORES = {
 GRUPOS = {"TotalCharges": "tenure", "MonthlyCharges": "InternetService"}
 
 
-@lru_cache(maxsize=1)
-def _cargar():
+def modelos_disponibles():
+    """Devuelve {archivo: {"nombre", "umbral", ...}} y el modelo recomendado."""
     with open(RUTA_MODELOS / "config.json", encoding="utf-8") as f:
         config = json.load(f)
+    return config["modelos"], config["modelo"]
+
+
+@lru_cache(maxsize=4)
+def _cargar(nombre_modelo=None):
+    with open(RUTA_MODELOS / "config.json", encoding="utf-8") as f:
+        config = json.load(f)
+    if nombre_modelo and nombre_modelo != config["modelo"]:
+        # Otro modelo: se usa su propio umbral óptimo (elegido en validación)
+        info = config["modelos"][nombre_modelo]
+        config = {**config, "modelo": nombre_modelo, "nombre_modelo": info["nombre"], "umbral": info["umbral"]}
     modelo = joblib.load(RUTA_MODELOS / f"{config['modelo']}.joblib")
     explicador = joblib.load(RUTA_MODELOS / "regresion_logistica.joblib")
     # Cliente "promedio" de train (ya transformado) como punto de comparación
@@ -108,9 +119,10 @@ def _explicar(fila: pd.DataFrame, explicador, media_train, n=3):
     return suben, bajan
 
 
-def predecir(clientes):
-    """clientes: dict (un cliente) o DataFrame (varios). Devuelve una lista de resultados."""
-    config, modelo, explicador, media_train = _cargar()
+def predecir(clientes, modelo=None):
+    """clientes: dict (un cliente) o DataFrame (varios).
+    modelo: "regresion_logistica" o "red_neuronal" (por defecto, el recomendado en config.json)."""
+    config, modelo, explicador, media_train = _cargar(modelo)
     df = pd.DataFrame([clientes]) if isinstance(clientes, dict) else clientes.copy()
     if "TotalCharges" not in df.columns:
         df["TotalCharges"] = df["tenure"] * df["MonthlyCharges"]  # aproximación si no se informa
@@ -129,6 +141,7 @@ def predecir(clientes):
             "probabilidad_abandono": round(float(p), 3),
             "decision": decision,
             "umbral": config["umbral"],
+            "modelo": config["nombre_modelo"],
             "factores_que_suben_riesgo": [s for s, _ in suben],
             "factores_que_bajan_riesgo": [b for b, _ in bajan],
             "explicacion": _texto(p, decision, config["umbral"], suben, bajan),
@@ -153,9 +166,11 @@ def main():
     parser = argparse.ArgumentParser(description="Predice el abandono de clientes.")
     parser.add_argument("--input", default=str(RAIZ / "data" / "ejemplo_clientes.csv"))
     parser.add_argument("--output", default=str(RAIZ / "results" / "predicciones.csv"))
+    parser.add_argument("--modelo", choices=["regresion_logistica", "red_neuronal"], default=None,
+                        help="Modelo a usar (por defecto, el recomendado)")
     args = parser.parse_args()
 
-    resultados = predecir(pd.read_csv(args.input))
+    resultados = predecir(pd.read_csv(args.input), modelo=args.modelo)
     for r in resultados:
         print(f"[{r['cliente']}] {r['decision'].upper()} — {r['explicacion']}\n")
 

@@ -11,13 +11,31 @@ from pathlib import Path
 import streamlit as st
 
 sys.path.append(str(Path(__file__).resolve().parent / "src"))
-from predict import predecir
+from predict import modelos_disponibles, predecir
 
 st.set_page_config(page_title="Predicción de abandono", page_icon="📉", layout="wide")
 st.title("¿Este cliente va a abandonar la compañía?")
 st.caption("Ingresá los datos del cliente. El modelo estima la probabilidad de abandono y "
            "recomienda si conviene contactarlo, según los costos del negocio "
            "(no detectar un abandono = USD 120; contactar de más = USD 15).")
+
+# Selector de modelo
+modelos, recomendado = modelos_disponibles()
+claves = list(modelos)
+with st.sidebar:
+    st.header("Modelo")
+    modelo_elegido = st.radio(
+        "Elegí el modelo",
+        claves,
+        index=claves.index(recomendado),
+        format_func=lambda k: modelos[k]["nombre"] + (" (recomendado)" if k == recomendado else ""),
+    )
+    info = modelos[modelo_elegido]
+    st.caption(f"Umbral de decisión: **{info['umbral']:.2f}**  \n"
+               f"Costo en validación: **USD {info['costo_validacion_usd']:,}**".replace(",", "."))
+    if modelo_elegido != "regresion_logistica":
+        st.info("La explicación se calcula con la Regresión Logística (aproximación), "
+                "porque la red neuronal no tiene coeficientes interpretables.")
 
 SI_NO = ["No", "Yes"]
 etiqueta = {"Yes": "Sí", "No": "No", "No internet service": "Sin internet",
@@ -68,7 +86,7 @@ if enviado:
         "PaperlessBilling": paperless, "PaymentMethod": payment, "MonthlyCharges": monthly,
         "TotalCharges": tenure * monthly,  # aproximación: antigüedad × cargo mensual
     }
-    r = predecir(cliente)[0]
+    r = predecir(cliente, modelo=modelo_elegido)[0]
 
     st.divider()
     m1, m2 = st.columns(2)
@@ -90,6 +108,6 @@ if enviado:
             st.markdown(f"- {f}")
 
     st.info(r["explicacion"])
-    st.caption("Modelo: Regresión Logística. La explicación compara a este cliente con el cliente promedio "
+    st.caption(f"Modelo: {r['modelo']}. La explicación compara a este cliente con el cliente promedio "
                "de los datos de entrenamiento. Son asociaciones, no causas. El umbral es bajo (14 %) porque "
                "no detectar un abandono cuesta 8 veces más que contactar a alguien de más.")

@@ -75,6 +75,10 @@ def main():
         "costo_validacion_usd": int(elegido["costo_usd"]),
         "costo_fn": COSTO_FN,
         "costo_fp": COSTO_FP,
+        # Umbral óptimo de cada modelo (para poder cambiar de modelo en la interfaz)
+        "modelos": {MODELOS[r["modelo"]]: {"nombre": r["modelo"], "umbral": float(r["umbral"]),
+                                           "costo_validacion_usd": int(r["costo_usd"])}
+                    for _, r in tabla.iterrows()},
     }
     with open(RUTA_MODELOS / "config.json", "w", encoding="utf-8") as f:
         json.dump(config, f, ensure_ascii=False, indent=2)

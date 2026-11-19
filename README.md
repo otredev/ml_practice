@@ -65,6 +65,9 @@ streamlit run app.py
 ```
 Se abre en el navegador un formulario para cargar los datos de un cliente; muestra la probabilidad
 de abandono, la recomendación (contactar / no contactar) y los factores que más suben y bajan el riesgo.
+En la barra lateral se puede cambiar entre la Regresión Logística (recomendada, umbral 0,14) y la Red neuronal (umbral 0,11).
+
+Desde la terminal también se puede elegir el modelo: `python src/predict.py --modelo red_neuronal`
 
 ## Resultados
 _Completar: tabla comparativa (precision, recall, F1, ROC-AUC, costo USD) y gráficos._
