@@ -1,0 +1,8 @@
+{
+  "modelo": "regresion_logistica",
+  "nombre_modelo": "Regresión Logística",
+  "umbral": 0.14,
+  "costo_validacion_usd": 9660,
+  "costo_fn": 120,
+  "costo_fp": 15
+}
