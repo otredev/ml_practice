@@ -25,7 +25,11 @@ Dataset: [Telco Customer Churn (Kaggle)](https://www.kaggle.com/datasets/blastch
 ubicado en `data/WA_Fn-UseC_-Telco-Customer-Churn.csv`.
 
 ## Ejecución
-_Completar con los comandos en orden._
+```bash
+python src/preprocessing.py   # Fase 2: limpieza y partición train/validación/test (muestra un resumen)
+python src/train.py           # Fase 3: entrena Regresión Logística y Red Neuronal, guarda en models/
+```
+_Completar con los siguientes comandos (entrenamiento, evaluación, predicción)._
 
 ## Estructura del proyecto
 ```
